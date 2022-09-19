@@ -2,3 +2,4 @@
 ml
 mlmodel
 modelorf.joblib
+*/__pycache__
