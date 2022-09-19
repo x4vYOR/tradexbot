@@ -1,5 +1,4 @@
 .env
 ml
 mlmodel
-ml/*
 modelorf.joblib
