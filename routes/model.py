@@ -10,6 +10,7 @@ from squemas.data import datasEntity
 import pandas as pd
 from config.dbmongo import DbBridge
 import aiofiles
+from datetime import datetime
 
 model_routes = APIRouter(route_class=VerifyTokenRoute)
 mlmodel = MlModel()
@@ -58,7 +59,6 @@ async def websocket_endpoint(websocket: WebSocket, timeframe: str, pairs:str):
     while True:
         try:
             aux_timestamp = (await conn.getLastNTimestamp(pairs_list[0], timeframe, 1))[0]
-            print("New timstamp: ",aux_timestamp)
             # Get the last candles in every pair from databases
             if(last_timestamp != aux_timestamp):
                 lastPairsCandle = [await conn.getLastCandleByOpenTime(item,timeframe, last_timestamp) for item in pairs_list]
@@ -75,7 +75,8 @@ async def websocket_endpoint(websocket: WebSocket, timeframe: str, pairs:str):
                 await websocket.send_json(res)
                 last_timestamp = aux_timestamp
             else:
-                sleep(10)
+                current_time = datetime.now()
+                sleep(61-current_time.second)
         except Exception as e:
             print('error:', e)
             break
