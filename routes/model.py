@@ -1,3 +1,5 @@
+from asyncio import current_task
+from time import sleep, time_ns
 from fastapi import APIRouter, UploadFile, File, WebSocket
 from fastapi.responses import JSONResponse
 from middlewares.verify_token_route import VerifyTokenRoute
@@ -55,19 +57,25 @@ async def websocket_endpoint(websocket: WebSocket, timeframe: str, pairs:str):
     await websocket.accept()
     while True:
         try:
+            aux_timestamp = (await conn.getLastNTimestamp(pairs_list[0], timeframe, 1))[0]
+            print("New timstamp: ",aux_timestamp)
             # Get the last candles in every pair from databases
-            lastPairsCandle = [await conn.getLastCandleByOpenTime(item,timeframe, last_timestamp) for item in pairs_list]
-            #print(type(lastPairsCandle))
-            #print(mlmodel.columns)
-            # Convert above data to dataframe and add column pair
-            data_to_df = await datasEntity(lastPairsCandle,mlmodel.columns)
-            #print(data_to_df)
-            #print(type(data_to_df))
-            df = pd.DataFrame(data_to_df)
-            df["pair"] = pairs_list
-            # send dataset to predict function and receive a list of dicts with "pairs" and "buy" keys
-            res = await mlmodel.predict(df) # return dict
-            await websocket.send_json(res)
+            if(last_timestamp != aux_timestamp):
+                lastPairsCandle = [await conn.getLastCandleByOpenTime(item,timeframe, last_timestamp) for item in pairs_list]
+                #print(type(lastPairsCandle))
+                #print(mlmodel.columns)
+                # Convert above data to dataframe and add column pair
+                data_to_df = await datasEntity(lastPairsCandle,mlmodel.columns)
+                #print(data_to_df)
+                #print(type(data_to_df))
+                df = pd.DataFrame(data_to_df)
+                df["pair"] = pairs_list
+                # send dataset to predict function and receive a list of dicts with "pairs" and "buy" keys
+                res = await mlmodel.predict(df) # return dict
+                await websocket.send_json(res)
+                last_timestamp = aux_timestamp
+            else:
+                sleep(10)
         except Exception as e:
             print('error:', e)
             break
