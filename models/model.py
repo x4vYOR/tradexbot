@@ -6,6 +6,7 @@ class ReloadModel(BaseModel):
     model: str
     columns: list
 
+
 """
 class DataRow(BaseModel):
     rsi: float

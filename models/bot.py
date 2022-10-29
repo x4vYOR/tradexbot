@@ -1,0 +1,67 @@
+from pydantic import BaseModel
+from typing import Optional
+
+class NewBot(BaseModel):
+    columns: list
+    pairs: list
+    scaler: str
+    model: str
+    timeframe: str
+    api_key: str
+    api_secret: str
+    exchange: str
+    initial_capital: float
+    currency_base: str
+    strategy: str
+    strategy_params: str
+    rules: list
+
+class UpdateBot(BaseModel):
+    uuid: str
+    columns: list
+    pairs: list
+    scaler: str
+    model: str
+    timeframe: str
+    api_key: Optional[str]
+    api_secret: Optional[str]
+    exchange: str
+    initial_capital: float
+    currency_base: str
+    strategy: str
+    strategy_params: str
+    rules: list
+
+class ActionBot(BaseModel):
+    uuid:str
+    task_id:Optional[str]
+
+class TradesBot(BaseModel):
+    uuid: str
+    pairs: Optional[list]
+    ini: Optional[str]
+    end: Optional[str]
+
+class MetricsBot(BaseModel):
+    uuid: str
+    ini: Optional[str]
+    end: Optional[str]
+
+class TaskTicket(BaseModel):
+    """ID and status for the async tasks"""
+    task_id: str
+    status: str
+    
+"""
+class DataRow(BaseModel):
+    rsi: float
+    adx: float
+    macd: float
+    macd_signal: float
+    macd_hist: float
+    ema50: float
+    ema100: float
+    ema200: float
+    obv: float
+    volume:float
+"""
