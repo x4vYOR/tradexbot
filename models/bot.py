@@ -11,10 +11,10 @@ class NewBot(BaseModel):
     api_secret: str
     exchange: str
     initial_capital: float
+    capital_pair: dict
     currency_base: str
     strategy: str
-    strategy_params: str
-    rules: list
+    strategy_parameters: str
 
 class UpdateBot(BaseModel):
     uuid: str
@@ -27,10 +27,10 @@ class UpdateBot(BaseModel):
     api_secret: Optional[str]
     exchange: str
     initial_capital: float
+    capital_pair: dict
     currency_base: str
     strategy: str
-    strategy_params: str
-    rules: list
+    strategy_parameters: str
 
 class ActionBot(BaseModel):
     uuid:str

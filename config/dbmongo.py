@@ -34,6 +34,7 @@ class DbBridge():
     def saveBot(self, data):
         try:
             data["uuid"] = uuid4()
+            data["status"] = "stopped"
             saved = self.client["autotrade"]["bot"].insert_one(data)
             print("bot insertado")
             res = self.client["autotrade"]["bot"].find({"_id": saved.inserted_id})
@@ -52,12 +53,74 @@ class DbBridge():
                 return False
         except Exception as e:
             print(e)
+    def setBotStatus(self, data):
+        try:
+            saved = self.client["autotrade"]["bot"].update_one(
+                {"uuid": data.uuid}, {"$set": {'status':data.status}}
+            )
+            print("status modificado a ",data.status)
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
     
+    def getBotStatus(self, uuid):
+        try:
+            bot = self.client["autotrade"]["bot"].find({"uuid":uuid}).limit(1)
+            return bot.status
+        except Exception as e:
+            print(e)
     def existBot(self, uuid):
         try:
             if(self.client["autotrade"]["bot"].find({"uuid":uuid}).limit(1).count()>0):
                 return True
             return False
+        except Exception as e:
+            print(e)
+
+    def saveTrade(self, data):
+        try:
+            saved = self.client["autotrade"]["bot"].update_one(
+                {"uuid": data.uuid}, {"$push": {'trades':data.trade}}
+            )
+            print("trade agregado")
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+    def closeTrade(self,data):
+        try:
+            saved = self.client["autotrade"]["bot"].updateOne(
+                {
+                    'uuid': data.uuid,
+                    'trades': { '$elemMatch': { 'pair': data.trade.pair, 'order_id': data.trade.order_id } }
+                },
+                { '$set': { "trades.$.closed" : 1, "trades.$.close_price": data.trade.close_price, "trades.$.close_date": data.trade.close_date } }
+            )
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+    
+    def updateBotCapitalPair(self,data):
+        try:
+            saved = self.client["autotrade"]["bot"].updateOne(
+                {
+                    'uuid': data.uuid,
+                    'capital_pair': { '$elemMatch': { 'pair': data.pair } }
+                },
+                { '$set': { "capital_pair.$.available_capital": data.available_capital } }
+            )
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
         except Exception as e:
             print(e)
 

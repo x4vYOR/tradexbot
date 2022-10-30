@@ -28,9 +28,9 @@ class MlModel():
     async def predict(self, df) -> list:
         try:
             # The first column must be pair name ie: ETHBTC
-            df1 = self.scaler.transform(df.loc[:, ~df.columns.isin(['pair','open_time'])])
+            df1 = self.scaler.transform(df.loc[:, ~df.columns.isin(['pair','open_time','close'])])
             df["buy"] = self.model.predict(df1)
-            return df[["pair","buy"]].to_dict('records')
+            return df[["pair","buy","close"]].to_dict('records')
         except Exception as e:
             print(e)
             return False
