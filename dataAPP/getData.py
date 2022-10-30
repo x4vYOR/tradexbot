@@ -247,13 +247,13 @@ class saveData:
             # guardo los datos no repetidos desde el buffer hacia la base de datos
             if(len(df)==1):
                 try:
-                    print("len buffer: ",len(self.pair_buffer[pair]))
+                    #print("len buffer: ",len(self.pair_buffer[pair]))
                     print("open_time inserted: ",df["open_time"])
                     #print("buffer iloc: ", self.pair_buffer[pair].iloc[-len(df):])
                     #print("Lo que se va giardar: ",self.pair_buffer[pair].iloc[-len(df):].to_dict('records'))
                     response = self.conn.saveCandle(self.pair_buffer[pair].iloc[-len(df):].to_dict('records'),pair,self.timeframe)
                     #print("solo unoooo")
-                    #print(response)
+                    print(response)
                 except Exception as e:
                     print(e)
             else:
@@ -278,6 +278,7 @@ class saveData:
 
     def addIndicators(self,dataframe):
         print(f"### Añadiendo indicadores al dataset ###")
+        dataframe = dataframe.apply(pd.to_numeric, errors='ignore')
         for indicator in self.indicators:
             if indicator == "rsi":
                 dataframe["rsi"] = ta.RSI(dataframe["close"], timeperiod=14)

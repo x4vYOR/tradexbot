@@ -1,5 +1,5 @@
 .env
 ml
 mlmodel
-ml/*
 modelorf.joblib
+*/__pycache__
