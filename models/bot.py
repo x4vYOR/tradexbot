@@ -42,6 +42,12 @@ class TradesBot(BaseModel):
     ini: Optional[str]
     end: Optional[str]
 
+class TradesPair(BaseModel):
+    uuid: str
+    pair: Optional[str]
+    ini: Optional[str]
+    end: Optional[str]
+
 class MetricsBot(BaseModel):
     uuid: str
     ini: Optional[str]

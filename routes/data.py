@@ -18,7 +18,7 @@ async def getData(data: ReqDataset):
         enddate = datetime.datetime.strptime(data.end, "%d/%m/%Y").timestamp()*1000
         # devuelve una lista con todos los datos entre fechas para cada tick
         datos = conn.getHistoricalCandles(data.pair, data.timeframe, startdate, enddate)      
-        dataset = await datasEntity(datos, data.indicators)
+        dataset = datasEntity(datos, data.indicators)
         return JSONResponse(content={"data":json.dumps(dataset)},status_code=200)
     except Exception as e:
         print(e)

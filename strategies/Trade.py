@@ -27,6 +27,7 @@ class Trade:
         quantity,
         investment,
         open_date,
+        close_candle,
         order_id,
         pair,
         timeframe,
@@ -41,11 +42,12 @@ class Trade:
         self.timeframe = timeframe
         self.investment = investment
         self.open_date = open_date
+        self.close_candle = close_candle
         self.order_id = order_id
         self.conn = conn
         self.uuid = uuid
         if new:
-            data = {"entry_price": float(self.entry_price), "close_price": float(0), "quantity": float(self.quantity), "pair": self.pair, "timeframe": self.timeframe, 
+            data = {"entry_price": float(self.entry_price), "close_price": float(0), "close_candle": str(self.close_candle), "quantity": float(self.quantity), "pair": self.pair, "timeframe": self.timeframe, 
                     "investment": float(self.investment), "closed": int(self.closed), "open_date": str(self.open_date), "close_date": "", "order_id": str(self.order_id) }
             res = conn.saveTrade({'uuid': self.uuid,'trade':data})
             if(res):

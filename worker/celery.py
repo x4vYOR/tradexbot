@@ -5,7 +5,7 @@ worker = Celery(
     "worker",
     backend=os.getenv("CELERY_BACKEND_URL"),
     broker=os.getenv("CELERY_BROKER_URL"),
-    include=["worker.tasks"],
+    include=["worker.task"],
 )
 # Optional configuration, see the application user guide.
 

@@ -3,3 +3,13 @@ ml
 mlmodel
 modelorf.joblib
 */__pycache__
+ml/models
+tradexbot.log
+ml/__pycache__
+config/__pycache__
+dataApp/__pycache__
+models/__pycache__
+routes/__pycache__
+squemas/__pycache__
+strategies/__pycache__
+worker/__pycache__

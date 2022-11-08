@@ -2,7 +2,7 @@
 class ConfigAPP():
     def __init__(self):
         self.ticks = [
-                    "DOTBTC",
+                    "BNBBTC",
                     "ETHBTC",
                     "SOLBTC"
                 ]
