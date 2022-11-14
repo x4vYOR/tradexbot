@@ -31,7 +31,7 @@ def runTrader(self,bot_config):
         strategy = None
         print(f"strategy: {bot_config['strategy']}")
         if(bot_config["strategy"] == "Incremental Buys"):
-            from strategies.strategies import IncrementalBuy
+            from strats.strategies import IncrementalBuy
             print("## Instanciando IncrementalBuy")
             strategy = IncrementalBuy(bot_config, conn, exchange)
             logger.info("### Incremental Buy  Strategy loaded")

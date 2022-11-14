@@ -3,8 +3,7 @@ class ConfigAPP():
     def __init__(self):
         self.ticks = [
                     "BNBBTC",
-                    "ETHBTC",
-                    "SOLBTC"
+                    "ETHBTC"
                 ]
         self.timeframe = "5m"
 

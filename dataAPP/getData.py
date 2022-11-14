@@ -262,15 +262,15 @@ class saveData:
             
 
     def startWebSocket(self):
-        sock_uri = "wss://stream.binance.com:9443/stream?streams="
+        sock_uri = "wss://stream.binance.com:9443/stream?streams=bnbbtc@kline_5m/ethbtc@kline_15m" #"wss://stream.binance.com:9443/stream?streams="
         # iterar de nuevo sobre los pares obteniendo las velas de la ultima hora
-        for index,pair in enumerate(self.pairs):
-            df = self.getRecentData(pair)
+        #for index,pair in enumerate(self.pairs):
+            #df = self.getRecentData(pair)
             
-            self.refreshBuffer(df,pair)
+            #self.refreshBuffer(df,pair)
             #luego de iterar sobre todos, genero la cadena de conexion de ws
             # ethusdt@kline_1m/btcusdt@kline_1m/bnbusdt@kline_1m/ethbtc@kline_1m
-            sock_uri += (pair.lower()+'@kline_'+self.timeframe) if index == 0 else ('/'+pair.lower()+'@kline_'+self.timeframe)
+            #sock_uri += (pair.lower()+'@kline_'+self.timeframe) if index == 0 else ('/'+pair.lower()+'@kline_'+self.timeframe)
             #retorno la instancia de websocket
         print(sock_uri)
         ws = WebSocketApp(sock_uri, on_open=self.on_open,on_close=self.on_close, on_message=self.on_message)
