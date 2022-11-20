@@ -6,7 +6,8 @@ import pandas as pd
 from binance import Client
 from time import sleep
 from celery.utils.log import get_task_logger
-from celery.contrib.abortable import AbortableTask  
+from celery.contrib.abortable import AbortableTask
+from strats.strategies import IncrementalBuy
 #import sys
 
 logger = get_task_logger(__name__)
@@ -31,7 +32,7 @@ def runTrader(self,bot_config):
         strategy = None
         print(f"strategy: {bot_config['strategy']}")
         if(bot_config["strategy"] == "Incremental Buys"):
-            from strats.strategies import IncrementalBuy
+            #from strats.strategies import IncrementalBuy
             print("## Instanciando IncrementalBuy")
             strategy = IncrementalBuy(bot_config, conn, exchange)
             logger.info("### Incremental Buy  Strategy loaded")

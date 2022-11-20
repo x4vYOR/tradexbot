@@ -1,0 +1,21 @@
+ 
+ -------------- celery@tradexbot v5.2.7 (dawn-chorus)
+--- ***** ----- 
+-- ******* ---- Linux-5.15.0-1021-gcp-x86_64-with-glibc2.35 2022-11-19 23:43:08
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         worker:0x7f9b9d5dee60
+- ** ---------- .> transport:   redis://127.0.0.1:6379//
+- ** ---------- .> results:     redis://127.0.0.1:6379/
+- *** --- * --- .> concurrency: 2 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . worker.task.runTrader
+
+
+worker: Warm shutdown (MainProcess)

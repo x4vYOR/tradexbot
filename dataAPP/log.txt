@@ -1,0 +1,498 @@
+CONEXION EXITOSA A BD
+### Cargando data en BNBBTC 15m ###
+### Obteniendo data historica BNBBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/BNBBTC15m.json
+### Obteniendo data del ultimo mes BNBBTC 15m
+### Obteniendo data del dia BNBBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en ETHBTC 15m ###
+### Obteniendo data historica ETHBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/ETHBTC15m.json
+### Obteniendo data del ultimo mes ETHBTC 15m
+### Obteniendo data del dia ETHBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en SOLBTC 15m ###
+### Obteniendo data historica SOLBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/SOLBTC15m.json
+### Obteniendo data del ultimo mes SOLBTC 15m
+### Obteniendo data del dia SOLBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en AVAXBTC 15m ###
+### Obteniendo data historica AVAXBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/AVAXBTC15m.json
+### Obteniendo data del ultimo mes AVAXBTC 15m
+### Obteniendo data del dia AVAXBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en ADABTC 15m ###
+### Obteniendo data historica ADABTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/ADABTC15m.json
+### Obteniendo data del ultimo mes ADABTC 15m
+### Obteniendo data del dia ADABTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en DOTBTC 15m ###
+### Obteniendo data historica DOTBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/DOTBTC15m.json
+### Obteniendo data del ultimo mes DOTBTC 15m
+### Obteniendo data del dia DOTBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en LINKBTC 15m ###
+### Obteniendo data historica LINKBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/LINKBTC15m.json
+### Obteniendo data del ultimo mes LINKBTC 15m
+### Obteniendo data del dia LINKBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en MATICBTC 15m ###
+### Obteniendo data historica MATICBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/MATICBTC15m.json
+### Obteniendo data del ultimo mes MATICBTC 15m
+### Obteniendo data del dia MATICBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en UNIBTC 15m ###
+### Obteniendo data historica UNIBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/UNIBTC15m.json
+### Obteniendo data del ultimo mes UNIBTC 15m
+### Obteniendo data del dia UNIBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en ALGOBTC 15m ###
+### Obteniendo data historica ALGOBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/ALGOBTC15m.json
+### Obteniendo data del ultimo mes ALGOBTC 15m
+### Obteniendo data del dia ALGOBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Cargando data en ATOMBTC 15m ###
+### Obteniendo data historica ATOMBTC 15m ###
+### Leyendo datos de archivo:  ./data/ticks/ATOMBTC15m.json
+### Obteniendo data del ultimo mes ATOMBTC 15m
+### Obteniendo data del dia ATOMBTC 15m
+### Añadiendo indicadores al dataset ###
+len inicial:   300
+### Obteniendo data del dia BNBBTC 15m
+###########################################
+### Obteniendo data del dia ETHBTC 15m
+###########################################
+### Obteniendo data del dia SOLBTC 15m
+###########################################
+### Obteniendo data del dia AVAXBTC 15m
+###########################################
+### Obteniendo data del dia ADABTC 15m
+###########################################
+### Obteniendo data del dia DOTBTC 15m
+###########################################
+### Obteniendo data del dia LINKBTC 15m
+###########################################
+### Obteniendo data del dia MATICBTC 15m
+###########################################
+### Obteniendo data del dia UNIBTC 15m
+###########################################
+### Obteniendo data del dia ALGOBTC 15m
+###########################################
+### Obteniendo data del dia ATOMBTC 15m
+###########################################
+wss://stream.binance.com:9443/stream?streams=bnbbtc@kline_15m/ethbtc@kline_15m/solbtc@kline_15m/avaxbtc@kline_15m/adabtc@kline_15m/dotbtc@kline_15m/linkbtc@kline_15m/maticbtc@kline_15m/unibtc@kline_15m/algobtc@kline_15m/atombtc@kline_15m
+open
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb2
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb3
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb4
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb5
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb6
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb7
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb8
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacb9
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacba
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacbb
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668899700000
+Name: open_time, dtype: int64
+row insertado
+637966f88baca8a487aaacbc
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacbd
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacbe
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacbf
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc0
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc1
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc2
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc3
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc4
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc5
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc6
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668900600000
+Name: open_time, dtype: int64
+row insertado
+63796a7c8baca8a487aaacc7
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacc8
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacc9
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacca
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaaccb
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaaccc
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaaccd
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacce
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaaccf
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacd0
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacd1
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668901500000
+Name: open_time, dtype: int64
+row insertado
+63796e008baca8a487aaacd2
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd3
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd4
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd5
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd6
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd7
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd8
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacd9
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacda
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacdb
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971848baca8a487aaacdc
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668902400000
+Name: open_time, dtype: int64
+row insertado
+637971868baca8a487aaacdd
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaacde
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaacdf
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace0
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace1
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace2
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace3
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace4
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace5
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace6
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace7
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668903300000
+Name: open_time, dtype: int64
+row insertado
+637975088baca8a487aaace8
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaace9
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacea
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaaceb
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacec
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaaced
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacee
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacef
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacf0
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacf1
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788c8baca8a487aaacf2
+###########################################
+### Añadiendo indicadores al dataset ###
+open_time inserted:  0    1668904200000
+Name: open_time, dtype: int64
+row insertado
+6379788e8baca8a487aaacf3

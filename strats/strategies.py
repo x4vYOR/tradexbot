@@ -4,7 +4,7 @@ Created on Thu Apr 21 20:13:24 2022
 
 @author: x4vyjm
 """
-from strategies.Trade import Trade
+from strats.Trade import Trade
 import ast
 from celery.utils.log import get_task_logger
 
@@ -221,7 +221,7 @@ class IncrementalBuy:
                 if self.pair_strategy[signal["pair"]].positioned:
                     print("si esta posicionada")
                     if (
-                        float(signal["close"]) >= self.pair_strategy[signal["pair"]].avg_buy_price * 0.98 #(1+self.profit)
+                        float(signal["close"]) >= self.pair_strategy[signal["pair"]].avg_buy_price * (1+self.profit)
                     ):  # if data_dict["close"] >= self.avg_buy_price * self.profit:
                         # Ya que se logró el beneficio cierro los trades, vendiendo toda la cantidad acumulada
                         self.closeTrades(self.pair_strategy[signal["pair"]].pair)
