@@ -1,6 +1,16 @@
 from pydantic import BaseModel
 from typing import Optional
 
+class StatusTrain(BaseModel):
+    checksum: str
+
+class NewTrain(BaseModel):
+    config_params: str
+    checksum: str
+
+class StopTrain(BaseModel):
+    checksum: str
+
 class NewBot(BaseModel):
     columns: list
     pairs: list

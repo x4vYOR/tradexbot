@@ -31,7 +31,7 @@ class MlModel():
 
 
             print("loading scaler")            
-            scaler_uri = './ml/models/'+dirs["scaler"]
+            scaler_uri = './ml/models/scalers/'+dirs["scaler"]
             print("scaler uri: ",scaler_uri)
             print(f"exist scaler: {path.exists(scaler_uri)}")
             self.scaler = joblib.load(str(scaler_uri))

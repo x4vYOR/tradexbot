@@ -178,7 +178,7 @@ class IncrementalBuy:
         -------
         None.
         """
-        #print(f"data_dict is: {str(data_dict)}")
+        print(f"data_dict is: {str(data_dict)}")
         info_capital = {"portfolio": 0, "available": 0, "invested": 0, "close_time": data_dict[0]["close_time"]}
         for signal in data_dict:            
             print(f"signal is: {str(signal)}")

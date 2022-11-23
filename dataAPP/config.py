@@ -4,15 +4,7 @@ class ConfigAPP():
         self.ticks = [
                     "BNBBTC",
                     "ETHBTC",
-                    "SOLBTC",
-                    "AVAXBTC",
-                    "ADABTC",
-                    "DOTBTC",
-                    "LINKBTC",
-                    "MATICBTC",
-                    "UNIBTC",
-                    "ALGOBTC",
-                    "ATOMBTC"
+                    "SOLBTC"
                 ]
         self.timeframe = "15m"
 

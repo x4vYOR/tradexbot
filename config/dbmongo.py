@@ -93,7 +93,7 @@ class DbBridge():
             return False
         except Exception as e:
             print(e)
-
+    
     def saveTrade(self, data):
         try:
             saved = self.client["autotrade"]["bot"].update_one(
@@ -149,6 +149,54 @@ class DbBridge():
                 return False
         except Exception as e:
             print(e)
+
+    # ####################
+    def saveTrain(self, data):
+        try:
+            #data {"config", "checksum", "status", "result"}
+            saved = self.client["autotrain"]["model"].insert_one(data)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    
+    def getTrainStatus(self, checksum):
+        try:
+            train = self.client["autotrain"]["model"].find_one({"checksum": checksum},{'_id': 0})
+            return train
+        except Exception as e:
+            print(e)
+    def deleteTrain(self, checksum):
+        try:
+            self.client["autotrain"]["model"].delete_one({"checksum": checksum})
+            return True
+        except Exception as e:
+            print(e)
+    def updateStateTrain(self, checksum, status):
+        try:
+            saved = self.client["autotrain"]["model"].update_one(
+                {"checksum": checksum}, {"$set": {'status': status}}
+            )
+            print("train actualizado")
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+    def updateResultTrain(self, checksum, result):
+        try:
+            saved = self.client["autotrain"]["model"].update_one(
+                {"checksum": checksum}, {"$set": {'result': str(result),'status': "success"}}
+            )
+            print("train actualizado")
+            if(saved.modified_count>0):
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(e)
+    # ####################
 
     def saveCandles(self, candles, pair, timeframe):
         res = self.client[pair][timeframe].insert_many(candles)

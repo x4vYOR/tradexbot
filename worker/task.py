@@ -8,6 +8,8 @@ from time import sleep
 from celery.utils.log import get_task_logger
 from celery.contrib.abortable import AbortableTask
 from strats.strategies import IncrementalBuy
+from train.prepareData import PrepareData
+from train.Trainer import Trainer
 #import sys
 
 logger = get_task_logger(__name__)
@@ -48,16 +50,16 @@ def runTrader(self,bot_config):
         logger.info(f"### the bot status to RUNNING was changed")
         while True:            
             aux_timestamp = conn.getLastNTimestamp(bot_config["pairs"][0], bot_config["timeframe"], 1)[0]
-            #print(f"aux_timestamp loaded: {aux_timestamp}")
+            print(f"aux_timestamp loaded: {aux_timestamp}")
             # only if aux_timestamp is diferent we can make prediction
             if(last_timestamp != aux_timestamp):
                 logger.info("### there is a new timestamp")
                 # Get the last candles in every pair from databases
                 lastPairsCandle = [conn.getLastCandleByOpenTime(item,bot_config["timeframe"], last_timestamp) for item in bot_config["pairs"]]
-                #print(f"last_pairsCandle: {type(lastPairsCandle)}, {lastPairsCandle} ")
+                print(f"last_pairsCandle: {type(lastPairsCandle)}, {lastPairsCandle} ")
                 #logger.info(mlmodel.columns)
                 # Convert above data to dataframe and add column pair
-                #print(f"mlmodel.columns: {mlmodel.columns} type: {type(mlmodel.columns)}")
+                print(f"mlmodel.columns: {mlmodel.columns} type: {type(mlmodel.columns)}")
                 #print(f"aux_columns: {aux_columns} type: {type(aux_columns)}")
                 data_to_df = datasEntity(lastPairsCandle,aux_columns)
                 #print("data to df: ",data_to_df)
@@ -69,7 +71,7 @@ def runTrader(self,bot_config):
                 print("column pair added to df")
                 # send dataset to predict function and receive a list of dicts with "pairs" and "buy" keys
                 predicted_dict = mlmodel.predict(df) # return dict
-                #logger.info(f"### the model prediction is: {str(predicted_dict)}")                
+                logger.info(f"### the model prediction is: {str(predicted_dict)}")                
                 # send the pairs and signal dataframe to strategy
                 #it has the format [{"pair": "ETHBTC", "buy": false, "close": 0.001}, {"pair": "DOTBTC", "buy": false, "close": 0.001}, {"pair": "SOLBTC", "buy": false, "close": 0.001}]
                 logger.info("### the prediction was send to strategy")
@@ -92,3 +94,28 @@ def runTrader(self,bot_config):
     finally:
         conn.setBotStatus({"uuid":bot_config["uuid"], "status":"stopped"})
         #sys.stdout, sys.stderr = old_outs
+
+@worker.task(bind=True,base=AbortableTask)
+def runTrainer(self,config_params, checksum):
+    conn = DbBridge(host="localhost", port=27017, auth=False)
+    try:
+        print("HELLO")
+        objPrepareData = PrepareData(config_params, conn)
+        print("### Initializing Trainer")
+        objTrainer = Trainer(config_params, objPrepareData.train_dataset, objPrepareData.train_columns, objPrepareData.backtest_dataset, conn, checksum, y_columns="target")
+        print("### Call TRAIN")
+        result = objTrainer.train()
+        print("result is done")
+        if(len(result)>0):
+            logger.info(type(result))
+            success  = conn.updateResultTrain(checksum,str(result))
+            logger.info(str(success))
+            logger.info('Task success')
+        else:
+            logger.info('Task result is Empty, means the task was stopped')
+            conn.deleteTrain(checksum)
+        return    
+    except Exception as e:
+        print("An error ocurred. Deleting train...")
+        conn.deleteTrain(checksum)
+        logger.info(str(e))
