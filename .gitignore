@@ -14,3 +14,4 @@ squemas/__pycache__
 strategies/__pycache__
 worker/__pycache__
 dataApp/data
+train/backtest
