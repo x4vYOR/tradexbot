@@ -559,7 +559,7 @@ class Trainer:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text=">",
+                    text="▲",
                     showarrow=False,
                     font=dict(size=16, color="blue"),
                 )
@@ -567,15 +567,15 @@ class Trainer:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text=">",
-                    showarrow=True,
+                    text="◀",
+                    showarrow=False,
                     font=dict(size=16, color="green"),
                 )
             if sells == True:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text=">",
+                    text="▲",
                     showarrow=False,
                     font=dict(size=16, color="red"),
                 )
