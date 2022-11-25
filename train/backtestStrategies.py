@@ -251,27 +251,34 @@ class Promedio_creciente:
     def procesarDataset(self, dataset):
         for index, row in dataset.iterrows():
             if row["predicted"]:
+                # llega una señal de compra
                 self.lista_sells.append(False)
                 if (
                     self.periodo < self.maxima_n_compras
                     and self.distancia >= self.min_distancia
                 ):
+                    # si hay espacio para una compra mas
                     precio_compra = row["close"]
                     divisor = self.obtenerDivisor(
                         self.divisor_inicial, 1 / self.maxima_n_compras, self.periodo
                     )
                     self.periodo += 1
+                    # cuanto dinero base estoy invirtiendo
                     monto_entrada = self.capital / divisor
-                    cantidad_compra = (monto_entrada*0.999) / precio_compra
+                    # resto lo invertido del capital
+                    self.capital -= monto_entrada
+                    # cuanta cantidad voy a comprar
+                    cantidad_compra = (monto_entrada) / precio_compra
                     self.precio_compra_promedio = self.promediarPrecioCompra(
                         self.precio_compra_promedio,
                         precio_compra,
                         cantidad_compra,
                         self.cantidad_total,
                     )
-                    self.capital -= monto_entrada
                     self.cantidad_total += cantidad_compra
+                    # cuanto capital tengo invertido despues de comprar
                     self.capital_invertido = self.cantidad_total * row["close"]
+                    # cuanto dinero base voy invirtiendo
                     self.monto_total += monto_entrada
                     self.posicionado = True
                     self.lista_buys.append(True)
@@ -285,13 +292,14 @@ class Promedio_creciente:
                 self.distancia += 1
                 self.lista_buys.append(False)
                 if self.posicionado:
-                    if row["high"] >= self.precio_compra_promedio * self.profit:
-                        monto_salida = (
-                            self.precio_compra_promedio
-                            * self.profit
-                            * self.cantidad_total
-                        )
-                        self.capital += (monto_salida*0.999)
+                    self.capital_invertido = self.cantidad_total * row["close"]
+                    # si estoy posicionado mi capital variará si vendo
+                    # ademas al vender todo mi capital invertido se reduce a cero
+                    if row["close"] >= (self.precio_compra_promedio * self.profit):
+                        # Si em la vela hubo la chance de vender
+                        #calculo el monto resultado de la venta
+                        # Todo el dinero de la venta se coloca en el capital
+                        self.capital += self.capital_invertido
                         self.lista_periodos.append(self.periodo)
                         # print("VENTA -- Capital: ",self.capital, " Periodo: ",self.periodo," Promedio: ",self.precio_compra_promedio," Precio: ", row['Close']," Monto: ",monto_salida)
                         self.periodo = 0
@@ -304,10 +312,10 @@ class Promedio_creciente:
                         self.distancia = self.min_distancia
                     else:
                         self.lista_sells.append(False)
-                        self.capital_invertido = self.cantidad_total * row["close"]
                 else:
+                    # si no tengo compras no cambia nada y no se debe actualizar mi capital ni el valor de mis inversiones
                     self.lista_sells.append(False)
-            self.lista_fondos.append(self.capital_invertido + self.capital)
+            self.lista_fondos.append((self.capital + self.capital_invertido))
             self.lista_invertido.append(self.capital_invertido)
 
 
