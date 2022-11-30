@@ -211,25 +211,25 @@ class Trainer:
 
     def splitData(self):
         print("####### SPLIT DATA: ",float(self.conf["training_detail"]["data_split"])/100)
-        print(self.train_columns)
-        print(self.dataset.info())
+        #print(self.train_columns)
+        #print(self.dataset.info())
         X_Cols = self.dataset[self.train_columns]
-        print("X_Cols: ")
-        print(X_Cols)
+        #print("X_Cols: ")
+        #print(X_Cols)
         Y_Cols = self.dataset[self.y_columns]
-        print("Y_Cols: ")
-        print(Y_Cols)
+        #print("Y_Cols: ")
+        #print(Y_Cols)
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             X_Cols, Y_Cols, test_size=float(self.conf["training_detail"]["data_split"])/100, random_state=0
         )
-        print("x_train: ")
-        print(self.X_train)
-        print("X_test: ")
-        print(self.X_test)
-        print("y_train: ")
-        print(self.y_train)
-        print("y_test: ")
-        print(self.y_test)
+        #print("x_train: ")
+        #print(self.X_train)
+        #print("X_test: ")
+        #print(self.X_test)
+        #print("y_train: ")
+        #print(self.y_train)
+        #print("y_test: ")
+        #print(self.y_test)
         self.scaler = StandardScaler()
         self.X_train = self.scaler.fit_transform(self.X_train)
         self.X_test = self.scaler.transform(self.X_test)
@@ -307,12 +307,15 @@ class Trainer:
                     print("status is stopped")
                     return []
                 backtest_data["data"] = self.addTarget(self.conf, backtest_data["data"])
+                print(self.train_columns)
+                print(backtest_data["data"].columns)
                 y_pred = self.predictModel(self.model, backtest_data["data"][self.train_columns], True) 
                 backtest_data["data"]["predicted"] = y_pred
-                chart_funds, chart_candles,backtest_name,backtest_conf,profit,n_buys,n_buysacum,maxdowndraw = self.backtest(backtest_data["data"], mod["algorithm"]["name"]+'_'+backtest_data["pair"], self.conf["strategy"])
+                chart_funds, chart_candles,backtest_name,backtest_conf,profit,percent_profit,n_buys,n_buysacum,maxdowndraw = self.backtest(backtest_data["data"], mod["algorithm"]["name"]+'_'+backtest_data["pair"], self.conf["strategy"])
                 backtest_response.append({"pair": backtest_data["pair"], "chart_candles": chart_candles, "chart_funds": chart_funds, 
                     "metrics":  [
-                        {"name": "% Profit", "value": profit},
+                        {"name": "Profit/Loss", "value": profit},
+                        {"name": "% Profit", "value": percent_profit},
                         {"name": "Max Drawdown", "value": maxdowndraw},
                         {"name": "N Buys", "value": n_buys},
                         {"name": "N BuysAcum", "value": n_buysacum}
@@ -336,7 +339,7 @@ class Trainer:
         """
         print(response)
         status_train = self.conn.getTrainStatus(self.checksum)
-        print(status_train)
+        #print(status_train)
         if status_train["status"] == "stopped":
             print("status is stopped")
             return []
@@ -377,14 +380,15 @@ class Trainer:
             )
 
         if strat["buy_strategy"]["name"] == "Incremental Buys":
+            initial_capital = self.conf["trading_setup"]["capital"]/len(self.backtest_dataset)
             strat_params = strat["strategy_parameters"]
             print(strat_params)
             print(strat_params["backtest"]["backtest_initial_max"][0])
             strategy = bs.Promedio_creciente(
-                self.conf["trading_setup"]["capital"],
+                self.conf["trading_setup"]["capital"]/len(self.backtest_dataset),
                 strat_params["backtest"]["backtest_initial_max"][0],
                 strat_params["backtest"]["backtest_initial_max"][1],
-                strat_params["target"]["target_profit"],
+                1 + float(strat_params["target"]["target_profit"]),
                 strat_params["backtest"]["backtest_distance"],
             )
             strategy.procesarDataset(dataset[["predicted", "close", "high"]])
@@ -423,6 +427,7 @@ class Trainer:
                 strat["buy_strategy"]["name"],
                 strat,
                 strategy.lista_fondos[-1],
+                ((strategy.lista_fondos[-1]/initial_capital)-1)*100,
                 strategy.lista_buys.count(True),
                 max(strategy.lista_periodos) if len(strategy.lista_periodos)>0 else 0,
                 maxdowndraw["mdd"].values[-1]
@@ -523,11 +528,11 @@ class Trainer:
         print("#### IMPRIMIENDO GRÁFICA  ", titulo, " ####")
         dataset = dataset.reset_index()
         fig = make_subplots(
-            rows=3,
+            rows=4,
             cols=1,
             shared_xaxes=True,
             vertical_spacing=0.01,
-            row_width=[0.2, 0.1, 0.5],
+            row_width=[0.1, 0.1, 0.1, 0.5],
         )
 
         fig.add_trace(
@@ -548,7 +553,7 @@ class Trainer:
             go.Scatter(x=dataset["open_time"], y=dataset["capital"]), row=3, col=1
         )
         fig.add_trace(
-            go.Scatter(x=dataset["open_time"], y=dataset["invertido"]), row=3, col=1
+            go.Scatter(x=dataset["open_time"], y=dataset["invertido"]), row=4, col=1
         )
 
         for i in range(len(dataset["predicted"])):
@@ -559,25 +564,25 @@ class Trainer:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text="▲",
+                    text="-",
                     showarrow=False,
-                    font=dict(size=16, color="blue"),
+                    font=dict(size=38, color="blue"),
                 )
             if res == True:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text="◀",
+                    text=".",
                     showarrow=False,
-                    font=dict(size=16, color="green"),
+                    font=dict(size=34, color="green"),
                 )
             if sells == True:
                 fig.add_annotation(
                     x=dataset.loc[i, "open_time"],
                     y=dataset.loc[i, "close"],
-                    text="▲",
+                    text="-",
                     showarrow=False,
-                    font=dict(size=16, color="red"),
+                    font=dict(size=38, color="red"),
                 )
         fig.update_layout(
             xaxis_rangeslider_visible=False, showlegend=False, title=titulo

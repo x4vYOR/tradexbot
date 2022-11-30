@@ -286,12 +286,39 @@ class saveData:
                 dataframe["obv"] = ta.OBV(
                     dataframe["close"], dataframe["volume"]
                 )
+            elif indicator == "atr":
+                dataframe["atr"] = ta.ATR(
+                    dataframe["high"],
+                    dataframe["low"],
+                    dataframe["close"],
+                    timeperiod=14,
+                )
             elif indicator == "adx":
                 dataframe["adx"] = ta.ADX(
                     dataframe["high"],
                     dataframe["low"],
                     dataframe["close"],
                     timeperiod=14,
+                )
+            elif indicator == "cci":
+                dataframe["cci"] = ta.CCI(
+                    dataframe["high"],
+                    dataframe["low"],
+                    dataframe["close"],
+                    timeperiod=14,
+                )
+            elif indicator == "mfi":
+                dataframe["mfi"] = ta.MFI(
+                    dataframe["high"],
+                    dataframe["low"],
+                    dataframe["close"],
+                    dataframe["volume"],
+                    timeperiod=14,
+                )
+            elif indicator == "mom":
+                dataframe["mom"] = ta.MOM(
+                    dataframe["close"],
+                    timeperiod=10,
                 )
             elif indicator == "macd":
                 (
@@ -304,6 +331,16 @@ class saveData:
                     slowperiod=26,
                     signalperiod=9,
                 )
+            elif indicator == "bbands":
+                (
+                    dataframe["upperband"],
+                    dataframe["middleband"],
+                    dataframe["lowerband"],
+                ) = ta.BBANDS(
+                    dataframe["close"],
+                    timeperiod=5, nbdevup=2, nbdevdn=2, matype=0
+                )
+            
             elif indicator == "ema12":
                 dataframe["ema12"] = ta.EMA(dataframe["close"], timeperiod=12)
             elif indicator == "ema9":

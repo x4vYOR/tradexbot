@@ -13,5 +13,5 @@ routes/__pycache__
 squemas/__pycache__
 strategies/__pycache__
 worker/__pycache__
-dataApp/data
+dataApp/data/ticks
 train/backtest

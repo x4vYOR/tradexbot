@@ -268,7 +268,7 @@ class Promedio_creciente:
                     # resto lo invertido del capital
                     self.capital -= monto_entrada
                     # cuanta cantidad voy a comprar
-                    cantidad_compra = (monto_entrada) / precio_compra
+                    cantidad_compra = (monto_entrada*0.999) / precio_compra
                     self.precio_compra_promedio = self.promediarPrecioCompra(
                         self.precio_compra_promedio,
                         precio_compra,
@@ -299,7 +299,7 @@ class Promedio_creciente:
                         # Si em la vela hubo la chance de vender
                         #calculo el monto resultado de la venta
                         # Todo el dinero de la venta se coloca en el capital
-                        self.capital += self.capital_invertido
+                        self.capital += (self.capital_invertido*0.999)
                         self.lista_periodos.append(self.periodo)
                         # print("VENTA -- Capital: ",self.capital, " Periodo: ",self.periodo," Promedio: ",self.precio_compra_promedio," Precio: ", row['Close']," Monto: ",monto_salida)
                         self.periodo = 0
