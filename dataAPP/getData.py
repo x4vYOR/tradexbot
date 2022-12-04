@@ -216,7 +216,7 @@ class saveData:
         return df
 
     def refreshBuffer(self, df, pair):
-        print("###########################################")
+        #print("###########################################")
         #obtengo las 6 ultimas velas (opentime) de la BD
         lastTimestamps = self.conn.getLastNTimestamp(pair,self.timeframe,15)
         # me quedo con los que no se repiten
@@ -248,12 +248,12 @@ class saveData:
             if(len(df)==1):
                 try:
                     #print("len buffer: ",len(self.pair_buffer[pair]))
-                    print("open_time inserted: ",df["open_time"])
+                    #print("open_time inserted: ",df["open_time"])
                     #print("buffer iloc: ", self.pair_buffer[pair].iloc[-len(df):])
                     #print("Lo que se va giardar: ",self.pair_buffer[pair].iloc[-len(df):].to_dict('records'))
                     response = self.conn.saveCandle(self.pair_buffer[pair].iloc[-len(df):].to_dict('records'),pair,self.timeframe)
                     #print("solo unoooo")
-                    print(response)
+                    #print(response)
                 except Exception as e:
                     print(e)
             else:

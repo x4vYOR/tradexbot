@@ -100,6 +100,8 @@ def runTrainer(self,config_params, checksum):
     conn = DbBridge(host="localhost", port=27017, auth=False)
     try:
         print("HELLO")
+        objPrepareData = None
+        objTrainer = None
         objPrepareData = PrepareData(config_params, conn)
         print("### Initializing Trainer")
         objTrainer = Trainer(config_params, objPrepareData.train_dataset, objPrepareData.train_columns, objPrepareData.backtest_dataset, conn, checksum, y_columns="target")

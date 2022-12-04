@@ -14,7 +14,7 @@ class ConfigAPP():
                     "ALGOBTC",
                     "ATOMBTC"
                 ]
-        self.timeframe = "15m"
+        self.timeframe = "30m"
 
         self.start = "01-01-2017"
 
