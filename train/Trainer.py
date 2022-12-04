@@ -299,7 +299,17 @@ class Trainer:
                 ],
                 "model_best_parameters": best_params
             }
+            # Seccion para guardar metricas de rendimiento del portafolio
             backtest_response = []
+            ds_portfolio = pd.DataFrame()
+            ds_portfolio["close_time"] = self.backtest_dataset[0]["data"]["close_time"]
+            ds_portfolio["capital"] = 0
+            ds_portfolio["invertido"] = 0
+            pairs_portfolio = []
+            n_buys_portfolio = 0
+            n_buysacum_portfolio = 0
+            initial_capital_portfolio = 0
+            # End section
             for backtest_data in self.backtest_dataset:
                 status_train = self.conn.getTrainStatus(self.checksum)
                 print(status_train)
@@ -311,7 +321,7 @@ class Trainer:
                 print(backtest_data["data"].columns)
                 y_pred = self.predictModel(self.model, backtest_data["data"][self.train_columns], True) 
                 backtest_data["data"]["predicted"] = y_pred
-                chart_funds, chart_candles,backtest_name,backtest_conf,profit,percent_profit,n_buys,n_buysacum,maxdowndraw = self.backtest(backtest_data["data"], mod["algorithm"]["name"]+'_'+backtest_data["pair"], self.conf["strategy"])
+                chart_funds, chart_candles,backtest_name,backtest_conf,profit,percent_profit,n_buys,n_buysacum,maxdowndraw,ds_capital,ds_invertido,initial_capital = self.backtest(backtest_data["data"], mod["algorithm"]["name"]+'_'+backtest_data["pair"], self.conf["strategy"])
                 backtest_response.append({"pair": backtest_data["pair"], "chart_candles": chart_candles, "chart_funds": chart_funds, 
                     "metrics":  [
                         {"name": "Profit/Loss", "value": profit},
@@ -321,7 +331,22 @@ class Trainer:
                         {"name": "N BuysAcum", "value": n_buysacum}
                     ]
                 })
+                ds_portfolio["capital"] += ds_capital
+                ds_portfolio["invertido"] += ds_invertido
+                ds_portfolio[backtest_data["pair"]] = ds_capital
+                pairs_portfolio.append(backtest_data["pair"])
+                initial_capital_portfolio += initial_capital
+                n_buys_portfolio += n_buys
+                n_buysacum_portfolio = max(n_buysacum_portfolio,n_buysacum)
             aux_response["backtest"] = backtest_response
+            #calcular resultados del portafolio y agregar el grafico total
+            chart_portfolio, max_drawdown_portfolio = self.chartEvolutionPortfolio(ds_portfolio,pairs_portfolio,f"Portfolio Evolution - {mod['algorithm']['name']}")
+            aux_response['model']['chart'] = chart_portfolio
+            aux_response['model']['metrics'].append({"name": "N buys", "value": n_buys_portfolio})
+            aux_response['model']['metrics'].append({"name": "N BuysAcum", "value": n_buysacum_portfolio})
+            aux_response['model']['metrics'].append({"name": "Max Drawdown", "value": max_drawdown_portfolio})
+            aux_response['model']['metrics'].append({"name": "Capital", "value": float(ds_portfolio["capital"].iat[-1])})
+            aux_response['model']['metrics'].append({"name": "Profit", "value": ((float(ds_portfolio["capital"].iat[-1])/initial_capital_portfolio)-1)*100})
             response.append(aux_response)
             aux_response = {}
         
@@ -430,7 +455,10 @@ class Trainer:
                 ((strategy.lista_fondos[-1]/initial_capital)-1)*100,
                 strategy.lista_buys.count(True),
                 max(strategy.lista_periodos) if len(strategy.lista_periodos)>0 else 0,
-                maxdowndraw["mdd"].values[-1]
+                maxdowndraw["mdd"].values[-1],
+                dataset["capital"],
+                dataset["invertido"],
+                initial_capital
             )
 
         if strat["buy_strategy"]["name"] == "promedio_creciente_dos":
@@ -615,6 +643,27 @@ class Trainer:
             )
             fig.write_html(nombre)
             # fig.show()
+    def chartEvolutionPortfolio(self, dataset, pairs, titulo):
+        name_chart = (
+                "./train/backtest/portfolio_"
+                + datetime.now().strftime("%d%m%Y%I%M%S%p")
+                + ".html"
+            )
+        print("#### IMPRIMIENDO  ", titulo, " TODO ####")
+        fig = make_subplots(
+            rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.01, row_width=[0.2, 0.3, 0.3],
+        )
+        fig.add_trace(go.Scatter(x=dataset["close_time"], y=dataset["capital"], name="Capital"), row=1, col=1)
+        for pair in pairs:
+            fig.add_trace(go.Scatter(x=dataset["close_time"], y=dataset[pair], name=pair), row=2, col=1)
+        fig.add_trace(go.Scatter(x=dataset["close_time"], y=dataset["invertido"], name="Invested"), row=3, col=1)
+        fig.update_layout(
+            xaxis_rangeslider_visible=False, showlegend=True, title=titulo
+        )
+        fig.write_html(name_chart)
+        maxdowndraw = self.calc_MDD(dataset["capital"])
+        return name_chart, maxdowndraw["mdd"].values[-1]
+        # fig.show()
 
     def metrics(self, y_test, y_pred):
         rf_matrix = confusion_matrix(y_test, y_pred)

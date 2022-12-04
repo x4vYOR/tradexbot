@@ -44,7 +44,7 @@ class PrepareData:
         for item in extract_indicators(configuration["train_indicators"],configuration["strategy"]["rules"]):
             self.x_columns.append(item)
             self.train_columns.append(item)
-        self.pairs = [item["pair"]["name"] for item in configuration["strategy"]["strategy_pairs"]]
+        self.pairs = list(set([item["pair"]["name"] for item in configuration["strategy"]["strategy_pairs"]]))
         self.start = configuration["train_data_start"]
         self.end = configuration["backtest_data_end"]
         self.split = configuration["backtest_data_start"]
@@ -54,6 +54,7 @@ class PrepareData:
         
     
     def loadDataset(self):
+        self.backtest_dataset = []
         for pair in self.pairs:
             startdate = datetime.strptime(self.start, "%d/%m/%Y").timestamp()*1000
             enddate = datetime.strptime(self.end, "%d/%m/%Y").timestamp()*1000
