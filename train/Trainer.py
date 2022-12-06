@@ -6,6 +6,9 @@ Created on Mon Apr 11 16:49:57 2022
 """
 import pandas as pd
 import numpy as np
+import tensorflow as tf
+#import tensorflow_addons as tfa
+from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import svm
@@ -28,6 +31,7 @@ from datetime import date, datetime
 import json
 import ast
 import os
+
 from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
@@ -235,10 +239,17 @@ class Trainer:
         self.X_test = self.scaler.transform(self.X_test)
         print("### success splitted")
 
-    def predictModel(self, model, dataset, escalado=False):
+    def predictModel(self, model, dataset, escalado=False, name=""):
         if escalado:
             dataset = self.scaler.transform(dataset)
+        if(name == "LSTM"):
+            print("Is LSTM need to reshape after predict")
+            dataset = dataset.reshape((dataset.shape[0], dataset.shape[1], 1))
         y_pred = model.predict(dataset)
+        if(name == "LSTM"):
+            print(f"self.y_pred before: {y_pred}")
+            print("Is LSTM need to reshape after predict")
+            y_pred = y_pred > 0.5
         return y_pred
 
     def train(self):
@@ -273,7 +284,14 @@ class Trainer:
                 self.model, best_params, nombre_modelo = self.entrenarSVM(mod)
             elif mod["algorithm"]["name"]  == "XGBoost":
                 self.model, best_params, nombre_modelo = self.entrenarXGB(mod)
-            self.y_pred = self.predictModel(self.model, self.X_test)
+            elif mod["algorithm"]["name"]  == "LSTM":
+                self.model, best_params, nombre_modelo = self.entrenarLSTM(mod)
+                
+            print("### predict with model")
+            self.y_pred = self.predictModel(self.model, self.X_test, name=mod["algorithm"]["name"])
+            
+            print(f"self.y_pred after: {self.y_pred}")
+            
             status_train = self.conn.getTrainStatus(self.checksum)
             print(status_train)
             if status_train["status"] == "stopped":
@@ -319,7 +337,7 @@ class Trainer:
                 backtest_data["data"] = self.addTarget(self.conf, backtest_data["data"])
                 print(self.train_columns)
                 print(backtest_data["data"].columns)
-                y_pred = self.predictModel(self.model, backtest_data["data"][self.train_columns], True) 
+                y_pred = self.predictModel(self.model, backtest_data["data"][self.train_columns], escalado=True, name=mod["algorithm"]["name"]) 
                 backtest_data["data"]["predicted"] = y_pred
                 chart_funds, chart_candles,backtest_name,backtest_conf,profit,percent_profit,n_buys,n_buysacum,maxdowndraw,ds_capital,ds_invertido,initial_capital = self.backtest(backtest_data["data"], mod["algorithm"]["name"]+'_'+backtest_data["pair"], self.conf["strategy"])
                 backtest_response.append({"pair": backtest_data["pair"], "chart_candles": chart_candles, "chart_funds": chart_funds, 
@@ -855,6 +873,67 @@ class Trainer:
         joblib.dump(best_model, nombre_modelo, 4)
         return best_model, svm_RandomGrid.best_params_, nombre_modelo
 
+    def entrenarLSTM(self, conf):
+        parameters = ast.literal_eval(conf["parameters"])
+        nombre_modelo = (
+            "./ml/models/"
+            + conf["algorithm"]["name"]
+            + "_"
+            + datetime.now().strftime("%d%m%Y%I%M%S%p")
+            + ".joblib"
+        )
+        print(f"Parameters: {parameters}")
+        print("#### ENTRENANDO LSTM CON GRIDSEARCH y CV ####")
+        param_grid = {
+            'batch_size': ast.literal_eval(parameters["batch_size"]),
+            'epochs': ast.literal_eval(parameters["epochs"]),
+        }
+        print("Reshaping x_train")
+        print(f"shape from x_train before: {self.X_train.shape}")
+        X_train = self.X_train.reshape((self.X_train.shape[0], self.X_train.shape[1], 1))
+        y_train = self.y_train
+        print(f"Shape x_train after: {X_train.shape} {X_train.shape[1]} , {X_train.shape[2]}")
+        print(f"Shape y_train: {y_train.shape}")
+        def create_model():
+            print("#### Defining model")
+            model = tf.keras.models.Sequential()            
+            model.add(tf.keras.layers.LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True))
+            print("### adding more layers")
+            model.add(tf.keras.layers.LSTM(units=64, return_sequences=True))
+            model.add(tf.keras.layers.Dropout(0.2))
+            model.add(tf.keras.layers.LSTM(units=32))
+            model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+            model.compile(loss="binary_crossentropy", optimizer="adam", metrics=[tf.keras.metrics.Precision()])
+            return model
+        print("before grid wrap model into keras classification")
+        model_wrapped = KerasClassifier(build_fn=create_model)
+
+        print("## call gridsearch")
+        lstm_grid_search = GridSearchCV(model_wrapped, param_grid,scoring = 'f1',cv=int(parameters["cv"]),n_jobs=-1)
+        lstm_grid_search.fit(X_train, y_train)
+
+        print('Best hyperparameters:', lstm_grid_search.best_params_)
+        # loss = binary_crossentropy , activation = sigmoid
+        # Use the best hyperparameters to train the model
+        best_model = tf.keras.models.Sequential()
+        best_model.add(tf.keras.layers.LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True))
+        best_model.add(tf.keras.layers.Dropout(0.2))
+        best_model.add(tf.keras.layers.LSTM(units=64, return_sequences=True))
+        best_model.add(tf.keras.layers.LSTM(units=32))
+        best_model.add(tf.keras.layers.Dense(1, activation="sigmoid"))
+        print("### compile model")
+        best_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=[tf.keras.metrics.Precision()])
+        print("### train model")
+        best_model.fit(X_train, y_train, epochs=lstm_grid_search.best_params_['epochs'], batch_size=lstm_grid_search.best_params_['batch_size'])
+
+        print("#### cv_result f1 ####")
+        #print(lstm_grid_search.cv_results_["mean_test_score"])
+        print("#### Best paramters ####")
+        #print(lstm_grid_search.best_params_)
+        print(f"X_train reshaped: ",X_train)
+        print(f"X_test: ",self.X_test)
+        joblib.dump(best_model, nombre_modelo, 4)
+        return best_model, lstm_grid_search.best_params_, nombre_modelo
 
     def deleteTraineds(self, column="profit"):
         n_delete = 4  # len(self.configurations)*len(self.models)
