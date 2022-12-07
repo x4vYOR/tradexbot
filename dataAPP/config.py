@@ -2,7 +2,6 @@
 class ConfigAPP():
     def __init__(self):
         self.ticks = [
-                    "BNBBTC",
                     "ETHBTC",
                     "SOLBTC",
                     "AVAXBTC",
@@ -11,10 +10,12 @@ class ConfigAPP():
                     "LINKBTC",
                     "MATICBTC",
                     "UNIBTC",
-                    "ALGOBTC",
-                    "ATOMBTC"
+                    "RUNEBTC",
+                    "ATOMBTC",
+                    "MANABTC",
+                    "THETABTC"
                 ]
-        self.timeframe = "30m"
+        self.timeframe = "15m"
 
         self.start = "01-01-2017"
 

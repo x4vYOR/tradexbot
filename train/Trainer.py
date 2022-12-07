@@ -136,7 +136,32 @@ class Trainer:
                             (dataset[rule["first_indicator"]["name"]] < rule["value"])
                         )    
                         , True, False)
-
+            elif rule["condition"]["name"] == "Increasing":
+                dataset["target"] = dataset["target"] & np.where(
+                    (
+                        dataset[rule["first_indicator"]["name"]].tail(int(rule["value"])).is_monotonic_increasing
+                    )    
+                    , True, False)
+            elif rule["condition"]["name"] == "Decreasing":
+                dataset["target"] = dataset["target"] & np.where(
+                    (
+                        dataset[rule["first_indicator"]["name"]].tail(int(rule["value"])).is_monotonic_decreasing
+                    )    
+                    , True, False)
+            elif rule["condition"]["name"] == "Bottom Breakpoint":
+                dataset["target"] = dataset["target"] & np.where(
+                    (
+                        (dataset[rule["first_indicator"]["name"]].shift(2) > dataset[rule["first_indicator"]["name"]].shift(1)) &
+                        (dataset[rule["first_indicator"]["name"]] > dataset[rule["first_indicator"]["name"]].shift(1)) 
+                    )    
+                    , True, False)
+            elif rule["condition"]["name"] == "Top Breakpoint":
+                dataset["target"] = dataset["target"] & np.where(
+                    (
+                        (dataset[rule["first_indicator"]["name"]].shift(2) < dataset[rule["first_indicator"]["name"]].shift(1)) &
+                        (dataset[rule["first_indicator"]["name"]] < dataset[rule["first_indicator"]["name"]].shift(1)) 
+                    )    
+                    , True, False)
             elif rule["condition"]["name"] == "Equal":
                 if(rule["second_indicator"]["name"] != "value"):
                     dataset["target"] = dataset["target"] & np.where(dataset[rule["first_indicator"]["name"]] == dataset[rule["second_indicator"]["name"]], True, False)
@@ -247,8 +272,8 @@ class Trainer:
             dataset = dataset.reshape((dataset.shape[0], dataset.shape[1], 1))
         y_pred = model.predict(dataset)
         if(name == "LSTM"):
-            print(f"self.y_pred before: {y_pred}")
-            print("Is LSTM need to reshape after predict")
+            #print(f"self.y_pred before: {y_pred}")
+            #print("Is LSTM need to reshape after predict")
             y_pred = y_pred > 0.5
         return y_pred
 
@@ -270,7 +295,7 @@ class Trainer:
         # nombre_modelos = []
         for mod in self.conf["training_detail"]["algorithm_details"]:
             status_train = self.conn.getTrainStatus(self.checksum)
-            print(status_train)
+            print(status_train) 
             if status_train["status"] == "stopped":
                 print("status is stopped")
                 return []
@@ -358,13 +383,15 @@ class Trainer:
                 n_buysacum_portfolio = max(n_buysacum_portfolio,n_buysacum)
             aux_response["backtest"] = backtest_response
             #calcular resultados del portafolio y agregar el grafico total
-            chart_portfolio, max_drawdown_portfolio = self.chartEvolutionPortfolio(ds_portfolio,pairs_portfolio,f"Portfolio Evolution - {mod['algorithm']['name']}")
+            chart_portfolio, max_drawdown_portfolio, max_total_invested = self.chartEvolutionPortfolio(ds_portfolio,pairs_portfolio,f"Portfolio Evolution - {mod['algorithm']['name']}")
             aux_response['model']['chart'] = chart_portfolio
             aux_response['model']['metrics'].append({"name": "N buys", "value": n_buys_portfolio})
             aux_response['model']['metrics'].append({"name": "N BuysAcum", "value": n_buysacum_portfolio})
             aux_response['model']['metrics'].append({"name": "Max Drawdown", "value": max_drawdown_portfolio})
             aux_response['model']['metrics'].append({"name": "Capital", "value": float(ds_portfolio["capital"].iat[-1])})
             aux_response['model']['metrics'].append({"name": "Profit", "value": ((float(ds_portfolio["capital"].iat[-1])/initial_capital_portfolio)-1)*100})
+            aux_response['model']['metrics'].append({"name": "Capital used", "value": float(max_total_invested)})
+            aux_response['model']['metrics'].append({"name": "Profit Cap used", "value": ((float(ds_portfolio["capital"].iat[-1])-initial_capital_portfolio)/float(max_total_invested))*100})
             response.append(aux_response)
             aux_response = {}
         
@@ -425,8 +452,8 @@ class Trainer:
         if strat["buy_strategy"]["name"] == "Incremental Buys":
             initial_capital = self.conf["trading_setup"]["capital"]/len(self.backtest_dataset)
             strat_params = strat["strategy_parameters"]
-            print(strat_params)
-            print(strat_params["backtest"]["backtest_initial_max"][0])
+            #print(strat_params)
+            #print(strat_params["backtest"]["backtest_initial_max"][0])
             strategy = bs.Promedio_creciente(
                 self.conf["trading_setup"]["capital"]/len(self.backtest_dataset),
                 strat_params["backtest"]["backtest_initial_max"][0],
@@ -680,12 +707,15 @@ class Trainer:
         )
         fig.write_html(name_chart)
         maxdowndraw = self.calc_MDD(dataset["capital"])
-        return name_chart, maxdowndraw["mdd"].values[-1]
+        return name_chart, maxdowndraw["mdd"].values[-1], dataset["invertido"].max(), 
         # fig.show()
 
     def metrics(self, y_test, y_pred):
+        print("start metrics")
+        print(f"y_test {y_test}")
+        print(f"y_pred {y_pred}")
         rf_matrix = confusion_matrix(y_test, y_pred)
-
+        print(f"conf matrix made {rf_matrix}")
         true_negatives = rf_matrix[0][0]
         false_negatives = rf_matrix[1][0]
         true_positives = rf_matrix[1][1]
@@ -830,9 +860,9 @@ class Trainer:
         print(xgb_RandomGrid.cv_results_["mean_test_score"])
         print("#### Best paramters ####")
         print(xgb_RandomGrid.best_params_)
-        print(
-            f"Train Accuracy - : {xgb_RandomGrid.score(self.X_train,self.y_train):.3f}"
-        )
+        #print(
+        #    f"Train Accuracy - : {xgb_RandomGrid.score(self.X_train,self.y_train):.3f}"
+        #)
         best_model = xgb_RandomGrid.best_estimator_
         best_model.fit(self.X_train, self.y_train)
         joblib.dump(best_model, nombre_modelo, 4)
@@ -933,6 +963,7 @@ class Trainer:
         print(f"X_train reshaped: ",X_train)
         print(f"X_test: ",self.X_test)
         joblib.dump(best_model, nombre_modelo, 4)
+        print("model saved")
         return best_model, lstm_grid_search.best_params_, nombre_modelo
 
     def deleteTraineds(self, column="profit"):
