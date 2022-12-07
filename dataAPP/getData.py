@@ -13,7 +13,7 @@ class saveData:
 
     pairs = []
     timeframe = ""
-    binanceClient = Client()    
+    binanceClient = Client(tld='us')    
     conn = DbBridge()
     start = "01-01-2017"
     end = "20-12-2023"
