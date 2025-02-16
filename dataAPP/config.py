@@ -9,7 +9,6 @@ class ConfigAPP():
                     "ALGOUSDT",
                     "DOTUSDT",
                     "LINKUSDT",
-                    "MATICUSDT",
                     "UNIUSDT",
                     "MANAUSDT",
                     "THETAUSDT",
