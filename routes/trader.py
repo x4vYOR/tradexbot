@@ -9,10 +9,11 @@ import aiofiles
 from worker.task import runTrader, runTrainer, worker
 from celery.contrib.abortable import AbortableAsyncResult
 import ast
+from os import getenv
 
 trader_routes = APIRouter(route_class=VerifyTokenRoute)
 
-conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
+conn = DbBridge(password=getenv("MONGO_PASSWORD"), auth = True) #DbBridge(host="localhost", port=27017, auth=False)
 
 @trader_routes.post("/run/train")
 async def run_train(new_train: NewTrain):
