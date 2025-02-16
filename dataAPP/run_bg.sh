@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
-source "/home/x4vyjm/tradexbot/tradexbot/bin/activate"
+source "/home/xavy/Documentos/tradexbot/tradexenv/bin/activate"
 python -u main.py

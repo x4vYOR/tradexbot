@@ -9,7 +9,7 @@ import json
 
 data_routes = APIRouter(route_class=VerifyTokenRoute)
 
-conn = DbBridge(host="localhost", port=27017, auth=False)
+conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
 
 @data_routes.post("/data")
 async def getData(data: ReqDataset):

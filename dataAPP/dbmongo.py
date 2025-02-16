@@ -6,8 +6,14 @@ class DbBridge():
         if not (auth):
             uri = f"mongodb://{host}:{port}/"
         else:
-            uri = f"mongodb://{user}:{password}@{host}:{port}/admin?authSource=admin&authMechanism=SCRAM-SHA-1"
+            #uri = f"mongodb://{user}:{password}@{host}:{port}/admin?authSource=admin&authMechanism=SCRAM-SHA-1"
+            uri = f"mongodb+srv://tradexbot:{password}@tradexbot.npmgs2k.mongodb.net/?retryWrites=true&w=majority&appName=tradexbot"
         self.client = MongoClient(uri)
+        try:
+            self.client.admin.command('ping')
+            print("Pinged your deployment. You successfully connected to MongoDB!")
+        except Exception as e:
+            print(e)
         print("CONEXION EXITOSA A BD")
     
     def saveCandle(self, candle, pair, timeframe):

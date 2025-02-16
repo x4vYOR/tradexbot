@@ -24,7 +24,7 @@ def runTrader(self,bot_config):
         # load de model and scaler
         print(str(bot_config))
         mlmodel = MlModel()
-        conn = DbBridge(host="localhost", port=27017, auth=False)
+        conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
         exchange = Client(bot_config["api_key"], bot_config["api_secret"],tld='us')
         print("### model, conn and exchange Objects where loaded")
         result = mlmodel.load_model(bot_config)
@@ -97,7 +97,7 @@ def runTrader(self,bot_config):
 
 @worker.task(bind=True,base=AbortableTask)
 def runTrainer(self,config_params, checksum):
-    conn = DbBridge(host="localhost", port=27017, auth=False)
+    conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
     try:
         print("HELLO")
         objPrepareData = None

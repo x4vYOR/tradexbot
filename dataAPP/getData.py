@@ -8,13 +8,14 @@ from binance import Client
 import os
 import talib as ta
 import numpy as np
+from os import getenv
 
 class saveData:
 
     pairs = []
     timeframe = ""
     binanceClient = Client(tld='us')    
-    conn = DbBridge()
+    conn = DbBridge(password=getenv("MONGO_PASSWORD"), auth = True)
     start = "01-01-2017"
     end = "20-12-2023"
     sock_uri = ""

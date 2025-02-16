@@ -12,7 +12,7 @@ import ast
 
 trader_routes = APIRouter(route_class=VerifyTokenRoute)
 
-conn = DbBridge(host="localhost", port=27017, auth=False)
+conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
 
 @trader_routes.post("/run/train")
 async def run_train(new_train: NewTrain):
