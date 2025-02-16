@@ -14,7 +14,7 @@ class saveData:
 
     pairs = []
     timeframe = ""
-    binanceClient = Client(tld='us')    
+    binanceClient = Client()    
     conn = DbBridge(password=getenv("MONGO_PASSWORD"), auth = True)
     start = "01-01-2017"
     end = "20-12-2023"

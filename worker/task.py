@@ -25,7 +25,7 @@ def runTrader(self,bot_config):
         print(str(bot_config))
         mlmodel = MlModel()
         conn = DbBridge(password='7XUmBKFVEfyCrqwW', auth = True) #DbBridge(host="localhost", port=27017, auth=False)
-        exchange = Client(bot_config["api_key"], bot_config["api_secret"],tld='us')
+        exchange = Client(bot_config["api_key"], bot_config["api_secret"])
         print("### model, conn and exchange Objects where loaded")
         result = mlmodel.load_model(bot_config)
         aux_columns = ['close','open_time','close_time']+mlmodel.columns
